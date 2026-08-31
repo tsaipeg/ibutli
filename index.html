@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="nan-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bu̍t-lí ê Tâi-gí · Physics in Taiwanese</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0C2925;
+    --ink-2:#081E1A;
+    --paper:#F5EFE2;
+    --paper-2:#EBE1CE;
+    --cinnabar:#D83A2B;
+    --cinnabar-2:#B22E22;
+    --gold:#E2A43C;
+    --jade:#5C9A88;
+    --ink-soft:#D3E2DB;
+    --ink-mut:#8DAEA5;
+    --serif:'Newsreader', Georgia, 'Times New Roman', serif;
+    --sans:'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --han:'Noto Sans TC','PingFang TC','Microsoft JhengHei','Heiti TC', sans-serif;
+    --maxw:1120px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+  body{
+    background:var(--ink);
+    color:var(--ink-soft);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--gold);color:var(--ink-2)}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+  /* =========================================================
+     BILINGUAL PAIR MECHANICS
+     Every bilingual title is a pair of <span class="tg"> and
+     <span class="en">. CSS `order` decides which one leads:
+       body.lang-tg  →  台語 first, English second
+       body.lang-en  →  English first, 台語 second
+     ========================================================= */
+  .bi-stack{display:flex;flex-direction:column}
+  .bi-stack > .tg{order:1;font-family:var(--han)}
+  .bi-stack > .lo{order:2;font-family:var(--mono)}
+  .bi-stack > .en{order:3}
+  body.lang-en .bi-stack > .en{order:1}
+  body.lang-en .bi-stack > .tg{order:2}
+  body.lang-en .bi-stack > .lo{order:3}
+
+  .bi-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4em}
+  .bi-row > .tg{order:1;font-family:var(--han)}
+  .bi-row > .sep{order:2;opacity:.5}
+  .bi-row > .en{order:3}
+  body.lang-en .bi-row > .en{order:1}
+  body.lang-en .bi-row > .tg{order:3}
+
+  /* ---------- top bar ---------- */
+  header.bar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(8,30,26,.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(211,226,219,.10);
+  }
+  .bar-in{display:flex;align-items:center;gap:24px;height:66px}
+  .brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+  .brand .mark{
+    width:34px;height:34px;flex:none;
+    border:1.5px solid var(--gold);border-radius:50%;
+    display:grid;place-items:center;
+    color:var(--gold);font-family:var(--han);font-weight:700;font-size:17px;
+    position:relative;
+  }
+  .brand .mark::after{
+    content:"";position:absolute;inset:4px;border-radius:50%;
+    border:1px solid var(--cinnabar);opacity:.6;
+  }
+  .brand .name{display:flex;flex-direction:column;line-height:1.1}
+  .brand .name .tg{order:1;font-family:var(--han);font-weight:700;font-size:18px;letter-spacing:.01em;color:var(--paper)}
+  .brand .name .en{order:2;font-family:var(--sans);font-weight:600;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mut);margin-top:3px}
+  body.lang-en .brand .name .en{order:1;font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--paper);margin-top:0}
+  body.lang-en .brand .name .tg{order:2;font-size:11px;color:var(--gold);margin-top:3px;font-weight:500}
+
+  nav.links{display:flex;gap:26px}
+  nav.links a{
+    font-size:13.5px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);
+    padding:4px 0;position:relative;transition:color .2s;
+  }
+  nav.links a .tg{font-family:var(--han)}
+  body.lang-tg nav.links a .en{display:none}
+  body.lang-en nav.links a .tg{display:none}
+  nav.links a::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:1.5px;background:var(--gold);transition:right .25s ease}
+  nav.links a:hover{color:var(--paper)}
+  nav.links a:hover::after{right:0}
+
+  .lang-toggle{
+    display:inline-flex;border:1px solid rgba(211,226,219,.22);border-radius:100px;overflow:hidden;font-family:var(--mono);flex:none;
+  }
+  .lang-toggle button{
+    background:none;border:0;color:var(--ink-mut);cursor:pointer;
+    padding:7px 14px;font-family:inherit;font-size:12px;font-weight:500;transition:.2s;white-space:nowrap;
+  }
+  .lang-toggle button .han{font-family:var(--han)}
+  .lang-toggle button.on{background:var(--gold);color:var(--ink-2);font-weight:600}
+  .lang-toggle button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  .menu-btn{display:none;background:none;border:0;color:var(--paper);cursor:pointer;font-size:22px}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding:88px 0 96px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;position:relative;z-index:2}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--gold)}
+  h1{
+    display:flex;flex-direction:column;
+    font-size:clamp(38px,6vw,68px);
+    line-height:1.06;
+    color:var(--paper);
+    letter-spacing:-.01em;
+  }
+  h1 .tg{order:1;font-family:var(--han);font-weight:900;font-size:1em}
+  h1 .en{order:2;font-family:var(--serif);font-weight:500;font-style:italic;font-size:.52em;color:var(--gold);margin-top:14px;line-height:1.18}
+  body.lang-en h1 .en{order:1;font-style:normal;font-size:.8em;color:var(--paper);margin-top:0;line-height:1.1}
+  body.lang-en h1 .tg{order:2;font-size:.4em;color:var(--gold);margin-top:16px}
+  .lede{margin-top:26px;max-width:34ch;color:var(--ink-soft);font-size:18px}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:13px 22px;border-radius:100px;font-weight:600;font-size:15px;
+    cursor:pointer;border:1.5px solid transparent;transition:transform .15s, background .2s, color .2s;
+  }
+  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .btn-fill{background:var(--cinnabar);color:#fff}
+  .btn-fill:hover{background:var(--cinnabar-2);transform:translateY(-2px)}
+  .btn-line{border-color:rgba(211,226,219,.32);color:var(--paper)}
+  .btn-line:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* specimen card (signature element) */
+  .specimen{
+    position:relative;background:var(--paper);color:var(--ink-2);
+    border-radius:20px;padding:34px 32px 28px;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.55);
+    border:1px solid var(--paper-2);
+  }
+  .specimen::before{
+    content:"標本 · SPECIMEN";position:absolute;top:16px;right:20px;
+    font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--jade);
+  }
+  .spec-index{font-family:var(--mono);font-size:12px;color:var(--cinnabar);letter-spacing:.1em}
+  .spec-term{display:flex;flex-direction:column;margin:14px 0 0}
+  .spec-term .tg{order:1;font-family:var(--han);font-weight:900;font-size:74px;line-height:1;color:var(--ink-2);transition:opacity .4s}
+  .spec-term .lo{order:2;font-family:var(--mono);font-size:22px;color:var(--cinnabar-2);font-weight:600;margin-top:6px;transition:opacity .4s}
+  .spec-term .en{order:3;font-family:var(--serif);font-style:italic;font-size:20px;color:#5a6f68;margin-top:2px;transition:opacity .4s}
+  body.lang-en .spec-term .en{order:1;font-style:normal;font-size:40px;font-weight:600;color:var(--ink-2);margin-top:0;line-height:1.1}
+  body.lang-en .spec-term .tg{order:2;font-size:34px;margin-top:8px;color:#3d534d}
+  body.lang-en .spec-term .lo{order:3;margin-top:2px}
+  .spec-say{margin-top:14px}
+  .spec-rule{height:1px;background:var(--paper-2);margin:18px 0 16px}
+  .spec-note{font-size:14px;color:#6a7d76;min-height:2.8em;transition:opacity .4s}
+  .spec-dots{display:flex;gap:7px;margin-top:18px}
+  .spec-dots span{width:7px;height:7px;border-radius:50%;background:var(--paper-2);transition:.3s}
+  .spec-dots span.on{background:var(--cinnabar);transform:scale(1.15)}
+  .fade{opacity:0 !important}
+
+  /* ambient wave behind hero */
+  .hero-wave{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.5}
+  .hero-wave path{fill:none;stroke:var(--jade);stroke-width:1.2;opacity:.35}
+  .hero-wave path.g{stroke:var(--gold);opacity:.28}
+
+  /* ---------- generic section ---------- */
+  section.blk{padding:84px 0;border-top:1px solid rgba(211,226,219,.09)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:14px}
+  .sec-num{font-family:var(--mono);color:var(--cinnabar);font-size:14px;letter-spacing:.1em;flex:none}
+  .sec-head h2{display:flex;flex-direction:column;letter-spacing:-.01em;line-height:1.16}
+  .sec-head h2 .tg{order:1;font-family:var(--han);font-weight:700;color:var(--gold);font-size:clamp(28px,4vw,40px)}
+  .sec-head h2 .en{order:2;font-family:var(--serif);font-weight:600;color:var(--paper);font-size:clamp(21px,2.8vw,28px);margin-top:2px}
+  body.lang-en .sec-head h2 .en{order:1;font-size:clamp(28px,4vw,40px);margin-top:0}
+  body.lang-en .sec-head h2 .tg{order:2;font-size:clamp(18px,2.4vw,24px);margin-top:4px}
+  .sec-sub{max-width:56ch;color:var(--ink-soft);margin-bottom:40px;font-size:17.5px}
+
+  /* about pillars */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .pillar{background:var(--ink-2);border:1px solid rgba(211,226,219,.10);border-radius:16px;padding:26px 24px;transition:border-color .25s, transform .25s}
+  .pillar:hover{border-color:var(--gold);transform:translateY(-3px)}
+  .pillar h3{display:flex;flex-direction:column;margin-bottom:10px;line-height:1.25}
+  .pillar h3 .tg{order:1;font-family:var(--han);font-weight:700;font-size:26px;color:var(--gold)}
+  .pillar h3 .en{order:2;font-family:var(--serif);font-size:20px;color:var(--paper);font-weight:600;margin-top:2px}
+  body.lang-en .pillar h3 .en{order:1;font-size:22px;margin-top:0}
+  body.lang-en .pillar h3 .tg{order:2;font-size:19px;margin-top:4px}
+  .pillar p{font-size:15px;color:var(--ink-soft);line-height:1.55}
+
+  /* =========================================================
+     VOCABULARY + PRONUNCIATION
+     ========================================================= */
+  .vocab-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:26px}
+  .vocab{
+    background:var(--ink-2);border:1px solid rgba(211,226,219,.10);border-radius:14px;
+    padding:18px 20px;display:flex;gap:16px;align-items:flex-start;transition:border-color .25s, box-shadow .25s;
+  }
+  .vocab:hover{border-color:var(--jade)}
+  .vocab.playing{border-color:var(--gold);box-shadow:0 0 0 1px rgba(226,164,60,.35)}
+  .vocab.recording{border-color:var(--cinnabar)}
+  .v-main{flex:1;min-width:0}
+  .v-term{display:flex;flex-direction:column;line-height:1.22}
+  .v-term .tg{order:1;font-family:var(--han);font-weight:700;font-size:27px;color:var(--paper)}
+  .v-term .lo{order:2;font-family:var(--mono);font-size:14.5px;color:var(--gold);margin-top:3px}
+  .v-term .en{order:3;font-family:var(--serif);font-style:italic;font-size:15.5px;color:var(--ink-mut);margin-top:1px}
+  body.lang-en .v-term .en{order:1;font-style:normal;font-size:22px;font-weight:600;color:var(--paper);margin-top:0}
+  body.lang-en .v-term .tg{order:2;font-size:20px;color:var(--gold);margin-top:4px}
+  body.lang-en .v-term .lo{order:3;color:var(--ink-mut)}
+  .v-note{font-size:13.5px;color:var(--ink-mut);margin-top:9px;line-height:1.5}
+  .v-msg{font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;color:var(--gold);margin-top:10px;display:none}
+  .v-msg.show{display:block}
+  .v-msg a{text-decoration:underline}
+
+  .say{
+    width:46px;height:46px;flex:none;border-radius:50%;
+    border:1.5px solid var(--gold);background:none;color:var(--gold);
+    cursor:pointer;display:grid;place-items:center;transition:.2s;
+  }
+  .say svg{width:19px;height:19px;fill:currentColor}
+  .say:hover{background:var(--gold);color:var(--ink-2)}
+  .say:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .say.playing{background:var(--gold);color:var(--ink-2);animation:pulse 1.1s ease-in-out infinite}
+  .say.miss{border-color:var(--cinnabar);color:var(--cinnabar);animation:nudge .4s}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(226,164,60,.55)}50%{box-shadow:0 0 0 8px rgba(226,164,60,0)}}
+  @keyframes nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+  @media (prefers-reduced-motion:reduce){.say.playing,.say.miss{animation:none}}
+
+  .v-tools{display:flex;flex-direction:column;gap:6px;flex:none;align-items:stretch}
+  .mini{
+    font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+    background:none;border:1px solid rgba(211,226,219,.22);color:var(--ink-mut);
+    border-radius:8px;padding:5px 8px;cursor:pointer;transition:.2s;
+    display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:28px;
+  }
+  .mini svg{width:13px;height:13px;fill:currentColor}
+  .mini:hover{border-color:var(--jade);color:var(--paper)}
+  .mini:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .mini.rec.on{border-color:var(--cinnabar);color:#fff;background:var(--cinnabar);animation:pulse-red 1.1s infinite}
+  @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(216,58,43,.6)}50%{box-shadow:0 0 0 7px rgba(216,58,43,0)}}
+  .mini.dl{border-color:var(--gold);color:var(--gold)}
+  .mini[hidden]{display:none}
+
+  /* how-to panel */
+  .audio-help{background:var(--ink-2);border:1px dashed rgba(226,164,60,.4);border-radius:16px;padding:26px 28px}
+  .audio-help h4{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4em;margin-bottom:14px}
+  .audio-help h4 .tg{font-family:var(--han);color:var(--gold);font-size:20px;font-weight:700}
+  .audio-help h4 .en{font-family:var(--serif);color:var(--paper);font-size:19px;font-weight:600}
+  .help-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .help-step{font-size:14.5px;color:var(--ink-soft);line-height:1.55}
+  .help-step b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--jade);margin-bottom:6px;font-weight:600}
+  pre.code{
+    font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--gold);
+    background:rgba(0,0,0,.28);border:1px solid rgba(211,226,219,.10);border-radius:10px;
+    padding:14px 16px;margin-top:16px;overflow-x:auto;
+  }
+  pre.code .cm{color:var(--ink-mut)}
+
+  .audio-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;align-items:center}
+  .act{
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+    font-family:var(--sans);font-size:14px;font-weight:600;
+    padding:10px 17px;border-radius:100px;border:1.5px solid var(--gold);
+    background:none;color:var(--gold);transition:background .2s,color .2s,border-color .2s;
+  }
+  .act:hover{background:var(--gold);color:var(--ink-2)}
+  .act:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .act.primary{background:var(--cinnabar);border-color:var(--cinnabar);color:#fff}
+  .act.primary:hover{background:var(--cinnabar-2);border-color:var(--cinnabar-2);color:#fff}
+  .act[disabled]{opacity:.4;cursor:not-allowed}
+  .act[disabled]:hover{background:none;color:var(--gold)}
+  .act.primary[disabled]:hover{background:var(--cinnabar);color:#fff}
+  .act-note{width:100%;font-family:var(--mono);font-size:11.5px;line-height:1.6;color:var(--ink-mut);margin-top:4px}
+
+  /* toast */
+  #toast{
+    position:fixed;left:50%;bottom:26px;transform:translate(-50%,16px);
+    background:var(--ink-2);border:1px solid var(--gold);color:var(--paper);
+    padding:12px 18px;border-radius:100px;font-size:14px;z-index:200;
+    opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;max-width:90vw;text-align:center;
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* lessons */
+  .lessons{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .lesson{
+    background:var(--paper);color:var(--ink-2);border-radius:16px;overflow:hidden;
+    border:1px solid var(--paper-2);display:flex;flex-direction:column;
+  }
+  .lesson-top{padding:24px 24px 18px;cursor:pointer;position:relative}
+  .lesson-tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--jade);text-transform:uppercase}
+  .lesson-term{display:flex;flex-direction:column;margin-top:8px;padding-right:34px}
+  .lesson-term .tg{order:1;font-family:var(--han);font-weight:900;font-size:42px;line-height:1}
+  .lesson-term .lo{order:2;font-family:var(--mono);color:var(--cinnabar-2);font-size:15px;font-weight:600;margin-top:4px}
+  .lesson-term .en{order:3;font-family:var(--serif);font-style:italic;font-size:17px;color:#5a6f68;margin-top:1px}
+  body.lang-en .lesson-term .en{order:1;font-style:normal;font-size:28px;font-weight:600;color:var(--ink-2);margin-top:0;line-height:1.15}
+  body.lang-en .lesson-term .tg{order:2;font-size:24px;margin-top:6px;color:#3d534d}
+  body.lang-en .lesson-term .lo{order:3;margin-top:1px}
+  .lesson .say{width:38px;height:38px;margin-top:14px;border-color:var(--cinnabar);color:var(--cinnabar)}
+  .lesson .say:hover{background:var(--cinnabar);color:#fff}
+  .lesson .say.playing{background:var(--cinnabar);color:#fff}
+  .lesson .say svg{width:16px;height:16px}
+  .lesson-toggle{position:absolute;top:22px;right:22px;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--cinnabar);color:var(--cinnabar);display:grid;place-items:center;font-size:18px;transition:transform .3s;font-family:var(--sans)}
+  .lesson.open .lesson-toggle{transform:rotate(45deg)}
+  .lesson-body{max-height:0;overflow:hidden;transition:max-height .4s ease;background:#fbf7ee}
+  .lesson.open .lesson-body{max-height:760px}
+  .lesson-body-in{padding:6px 24px 26px;font-size:14.5px;color:#43514c;line-height:1.6}
+  .eq{
+    font-family:var(--mono);background:var(--ink-2);color:var(--gold);
+    padding:12px 16px;border-radius:10px;font-size:16px;margin:16px 0;display:inline-block;letter-spacing:.02em;
+  }
+  .lesson-body-in .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--jade);display:block;margin-top:16px;margin-bottom:4px}
+  .draft{border-left:2px solid var(--gold);padding-left:10px;font-style:italic;color:#7a6a3f;background:#fdf7e6;border-radius:0 6px 6px 0;padding:8px 10px;margin-top:14px;font-size:13px}
+
+  /* study + workshops shared list */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+  .card-list{display:flex;flex-direction:column;gap:16px}
+  .row-card{background:var(--ink-2);border:1px solid rgba(211,226,219,.10);border-radius:14px;padding:22px 24px;display:flex;gap:18px;align-items:flex-start;transition:border-color .25s}
+  .row-card:hover{border-color:var(--jade)}
+  .row-card .when{font-family:var(--mono);font-size:12px;color:var(--gold);flex:none;width:92px;line-height:1.4}
+  .row-card h4{margin-bottom:5px}
+  .row-card h4 .tg{font-family:var(--han);color:var(--gold);font-weight:700;font-size:19px}
+  .row-card h4 .en{font-family:var(--serif);font-size:19px;color:var(--paper);font-weight:600}
+  .row-card p{font-size:14.5px;color:var(--ink-soft)}
+  .tag-pill{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--jade);border:1px solid rgba(92,154,136,.4);border-radius:100px;padding:2px 10px;margin-top:8px}
+
+  .side-note{background:var(--ink-2);border:1px dashed rgba(226,164,60,.4);border-radius:14px;padding:24px}
+  .side-note h4{margin-bottom:10px}
+  .side-note h4 .tg{font-family:var(--han);color:var(--gold);font-size:20px;font-weight:700}
+  .side-note h4 .en{font-family:var(--serif);color:var(--paper);font-size:19px;font-weight:600}
+  .side-note p{font-size:14.5px;color:var(--ink-soft);margin-bottom:10px}
+
+  /* join */
+  .join{background:linear-gradient(160deg,var(--cinnabar) 0%, var(--cinnabar-2) 100%);border-radius:24px;padding:56px 44px;text-align:center;position:relative;overflow:hidden}
+  .join::before{content:"參加";position:absolute;font-family:var(--han);font-weight:900;font-size:280px;color:rgba(255,255,255,.06);top:-60px;right:-20px;line-height:1;pointer-events:none}
+  .join h2{display:flex;flex-direction:column;align-items:center;color:#fff;position:relative;z-index:1;line-height:1.2}
+  .join h2 .tg{order:1;font-family:var(--han);font-weight:700;font-size:clamp(28px,4vw,42px)}
+  .join h2 .en{order:2;font-family:var(--serif);font-weight:600;font-size:clamp(21px,2.8vw,28px);opacity:.92;margin-top:4px}
+  body.lang-en .join h2 .en{order:1;font-size:clamp(28px,4vw,42px);opacity:1;margin-top:0}
+  body.lang-en .join h2 .tg{order:2;font-size:clamp(19px,2.4vw,26px);opacity:.9;margin-top:6px}
+  .join p{color:rgba(255,255,255,.9);max-width:46ch;margin:16px auto 30px;position:relative;z-index:1}
+  .join .btn-fill{background:var(--paper);color:var(--cinnabar-2)}
+  .join .btn-fill:hover{background:#fff}
+  .join .btn-line{border-color:rgba(255,255,255,.6);color:#fff}
+  .join .btn-line:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.12)}
+  .join .cta-row{justify-content:center;position:relative;z-index:1}
+
+  /* footer */
+  footer{padding:48px 0 60px;border-top:1px solid rgba(211,226,219,.09);color:var(--ink-mut);font-size:14px}
+  .foot-in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .foot-brand{display:flex;flex-direction:column;line-height:1.3}
+  .foot-brand .tg{order:1;font-family:var(--han);color:var(--paper);font-weight:700;font-size:16px}
+  .foot-brand .en{order:2;font-size:14px;margin-top:4px}
+  body.lang-en .foot-brand .en{order:1;color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:600;margin-top:0}
+  body.lang-en .foot-brand .tg{order:2;font-size:14px;color:var(--ink-mut);font-weight:500;margin-top:4px}
+  footer a:hover{color:var(--gold)}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+  /* responsive */
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:40px}
+    .pillars,.lessons,.vocab-grid,.help-cols{grid-template-columns:1fr}
+    .two-col{grid-template-columns:1fr}
+    nav.links{display:none}
+    nav.links.show{display:flex;position:absolute;top:66px;left:0;right:0;flex-direction:column;gap:0;background:var(--ink-2);border-bottom:1px solid rgba(211,226,219,.12);padding:8px 28px}
+    nav.links.show a{padding:12px 0;border-bottom:1px solid rgba(211,226,219,.06)}
+    .menu-btn{display:block}
+  }
+  @media (max-width:560px){
+    .wrap{padding:0 20px}
+    .hero{padding:56px 0 64px}
+    .join{padding:40px 24px}
+    .spec-term .tg{font-size:60px}
+    .v-tools{flex-direction:row;flex-wrap:wrap}
+  }
+</style>
+</head>
+<body class="lang-tg">
+
+<!-- ================= TOP BAR ================= -->
+<header class="bar">
+  <div class="wrap bar-in">
+    <a href="#top" class="brand" aria-label="Home">
+      <span class="mark">物</span>
+      <span class="name">
+        <span class="tg">物理ê台語</span>
+        <span class="en">Physics in Taiwanese</span>
+      </span>
+    </a>
+    <nav class="links" id="nav">
+      <a href="#about"><span class="tg">簡介</span><span class="en">Mission</span></a>
+      <a href="#vocab"><span class="tg">字詞</span><span class="en">Vocabulary</span></a>
+      <a href="#lessons"><span class="tg">課程</span><span class="en">Lessons</span></a>
+      <a href="#groups"><span class="tg">讀冊會</span><span class="en">Study groups</span></a>
+      <a href="#workshops"><span class="tg">工作坊</span><span class="en">Workshops</span></a>
+      <a href="#join"><span class="tg">參加</span><span class="en">Join</span></a>
+    </nav>
+    <div class="lang-toggle" role="group" aria-label="Language emphasis">
+      <button id="btn-tg" class="on" onclick="setLang('tg')" aria-pressed="true">TW <span class="han">台語</span></button>
+      <button id="btn-en" onclick="setLang('en')" aria-pressed="false">EN</button>
+    </div>
+    <button class="menu-btn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('show')">☰</button>
+  </div>
+</header>
+
+<span id="top"></span>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <svg class="hero-wave" viewBox="0 0 1200 500" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,300 C150,240 300,360 450,300 C600,240 750,360 900,300 C1050,240 1200,360 1350,300"/>
+    <path class="g" d="M0,340 C150,280 300,400 450,340 C600,280 750,400 900,340 C1050,280 1200,400 1350,340"/>
+  </svg>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">母語 · Mother-tongue science</span>
+      <h1>
+        <span class="tg">用台語學物理</span>
+        <span class="en">Learn physics in your mother tongue.</span>
+      </h1>
+      <p class="lede">Forces, waves and gravity — explained in Tâi-gí, alongside English. Free lessons, live study groups, and bilingual workshops for anyone who thinks best in their home language.</p>
+      <div class="cta-row">
+        <a href="#join" class="btn btn-fill">Join a study group →</a>
+        <a href="#vocab" class="btn btn-line">Hear the words</a>
+      </div>
+    </div>
+
+    <!-- SIGNATURE: specimen card -->
+    <div class="specimen" id="specimen" aria-live="polite">
+      <div class="spec-index" id="spec-idx">No. 01 / 07</div>
+      <div class="spec-term">
+        <span class="tg" id="spec-han">力</span>
+        <span class="lo" id="spec-lo">la̍t</span>
+        <span class="en" id="spec-en">force</span>
+      </div>
+      <div class="spec-say">
+        <button class="say" id="spec-say" data-id="lat" aria-label="Play pronunciation">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4zm11.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM13 2.3v2.1c3.4.9 6 4 6 7.6s-2.6 6.7-6 7.6v2.1c4.6-1 8-5 8-9.7s-3.4-8.7-8-9.7z"/></svg>
+        </button>
+      </div>
+      <div class="spec-rule"></div>
+      <div class="spec-note" id="spec-note">What makes a night-market cart speed up when you push it.</div>
+      <div class="spec-dots" id="spec-dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="blk" id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2>
+        <span class="tg">為啥物用台語學物理</span>
+        <span class="en">Why physics in Taiwanese</span>
+      </h2>
+    </div>
+    <p class="sec-sub reveal">A language stays alive when it can talk about everything — not only food and family, but momentum, magnetism and light. Most of us were taught science only in Mandarin or English, so Tâi-gí never grew the words. This project builds them, out loud, together.</p>
+    <div class="pillars">
+      <div class="pillar reveal">
+        <h3>
+          <span class="tg">聽有</span>
+          <span class="en">Understand it first time</span>
+        </h3>
+        <p>Ideas land faster in the language you dream in. We teach the concept in Tâi-gí, then anchor every term to English so nothing gets lost.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>
+          <span class="tg">傳落去</span>
+          <span class="en">Keep the language living</span>
+        </h3>
+        <p>Like Te Reo Māori revitalisation, a heritage tongue survives by taking on new territory. Coining and sharing physics vocabulary is preservation in action.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>
+          <span class="tg">做伙</span>
+          <span class="en">Learn together</span>
+        </h3>
+        <p>Open study groups and workshops mean you're never decoding equations alone. Beginners, heritage speakers and teachers all welcome.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VOCABULARY + PRONUNCIATION ================= -->
+<section class="blk" id="vocab">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2>
+        <span class="tg">字詞佮發音</span>
+        <span class="en">Vocabulary &amp; pronunciation</span>
+      </h2>
+    </div>
+    <p class="sec-sub reveal">Press <strong>play</strong> to hear each term spoken in Tâi-gí, or <strong>0.7×</strong> to hear it slowly. You can also record your own voice straight in the browser and save it permanently into this page with one button — see the guide underneath.</p>
+
+    <div class="vocab-grid" id="vocab-grid"></div>
+
+    <div class="audio-help reveal">
+      <h4>
+        <span class="tg">錄音</span>
+        <span class="en">Adding your own recordings</span>
+      </h4>
+      <div class="help-cols">
+        <div class="help-step">
+          <b>1 · Record each word</b>
+          Click the mic beside a word, say it once, click the mic again to stop. Press play to check it, and re-record if you want. Seven words takes about two minutes.
+        </div>
+        <div class="help-step">
+          <b>2 · Or attach a file you already have</b>
+          Click the paperclip to use an existing recording instead — m4a, mp3, wav and phone voice memos all work.
+        </div>
+        <div class="help-step">
+          <b>3 · Save them into the page</b>
+          Press the red button below. Your voice is written straight into the HTML — one file, no audio folder, and it plays for everyone who visits.
+        </div>
+      </div>
+
+      <div class="audio-actions">
+        <button class="act primary" id="btn-export" disabled>Save my recordings into the site</button>
+        <button class="act" id="btn-copy" disabled>Copy the audio code instead</button>
+        <span class="act-note" id="export-note">No recordings yet in this visit — record a word above first.</span>
+      </div>
+
+<pre class="code"><span class="cm">// If you use "Copy the audio code": open taigiphysics.html in a text
+// editor and paste over everything between these two markers.</span>
+<span class="cm">/* AUDIO-BLOCK<span>-START</span> */</span>
+const AUDIO_BASE  = 'audio/';
+const AUDIO_FILES = {
+  <span class="cm">// 力  la̍t  force</span>
+  'lat': 'lat.webm',
+  <span class="cm">// …one line per word…</span>
+};
+<span class="cm">/* AUDIO-BLOCK<span>-END</span> */</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LESSONS ================= -->
+<section class="blk" id="lessons">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2>
+        <span class="tg">課程</span>
+        <span class="en">Lesson library</span>
+      </h2>
+    </div>
+    <p class="sec-sub reveal">Short, self-contained lessons. Each one gives you the Tâi-gí term, the physics, one clean equation, and an everyday example from home. Tap a card to open it.</p>
+    <div class="lessons" id="lesson-grid"></div>
+  </div>
+</section>
+
+<!-- ================= STUDY GROUPS ================= -->
+<section class="blk" id="groups">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">04</span>
+      <h2>
+        <span class="tg">線頂讀冊會</span>
+        <span class="en">Online study groups</span>
+      </h2>
+    </div>
+    <p class="sec-sub reveal">Small, friendly video calls where we work through problems in Tâi-gí and help each other over the tricky bits. Drop in to any that fit your level and timezone.</p>
+    <div class="two-col">
+      <div class="card-list">
+        <div class="row-card reveal">
+          <div class="when">Sun<br>16:00 TW</div>
+          <div>
+            <h4 class="bi-row"><span class="tg">頭起先</span><span class="sep">·</span><span class="en">Foundations</span></h4>
+            <p>Motion, force and energy from scratch. No maths beyond algebra. Perfect for high-schoolers and returning learners.</p>
+            <span class="tag-pill">beginner</span>
+          </div>
+        </div>
+        <div class="row-card reveal">
+          <div class="when">Wed<br>18:00 TW</div>
+          <div>
+            <h4 class="bi-row"><span class="tg">波動</span><span class="sep">·</span><span class="en">Waves &amp; light</span></h4>
+            <p>Sound, optics and the wave equation, worked through with demos you can try at home.</p>
+            <span class="tag-pill">intermediate</span>
+          </div>
+        </div>
+        <div class="row-card reveal">
+          <div class="when">Sat<br>10:00 TW</div>
+          <div>
+            <h4 class="bi-row"><span class="tg">考試班</span><span class="sep">·</span><span class="en">Exam clinic</span></h4>
+            <p>Bring your past-paper questions. We solve them live, narrating every step in Tâi-gí and English.</p>
+            <span class="tag-pill">all levels</span>
+          </div>
+        </div>
+      </div>
+      <div class="side-note reveal">
+        <h4 class="bi-row"><span class="tg">按怎參加</span><span class="sep">·</span><span class="en">How it works</span></h4>
+        <p>Groups meet on a video call — the link is emailed to members each week. Cap is 8 people so everyone gets to speak.</p>
+        <p>Can't make the time? Sessions are recorded and the bilingual notes are shared afterwards.</p>
+        <a href="#join" class="btn btn-line" style="margin-top:8px">Reserve a seat</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORKSHOPS ================= -->
+<section class="blk" id="workshops">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">05</span>
+      <h2>
+        <span class="tg">雙語工作坊</span>
+        <span class="en">Bilingual workshops</span>
+      </h2>
+    </div>
+    <p class="sec-sub reveal">Longer hands-on sessions built around one idea. We run them monthly, live and recorded, with a bilingual worksheet you keep.</p>
+    <div class="card-list">
+      <div class="row-card reveal">
+        <div class="when">90 min</div>
+        <div>
+          <h4 class="bi-row"><span class="tg">厝內物理</span><span class="sep">·</span><span class="en">Kitchen-table physics</span></h4>
+          <p>Measure gravity with a phone, model a pendulum with string and a coin — real experiments using what's already at home, explained fully in Tâi-gí.</p>
+          <span class="tag-pill">hands-on</span>
+        </div>
+      </div>
+      <div class="row-card reveal">
+        <div class="when">2 hrs</div>
+        <div>
+          <h4 class="bi-row"><span class="tg">造新詞</span><span class="sep">·</span><span class="en">Coining new terms</span></h4>
+          <p>A collaborative session where speakers and teachers agree on clear Tâi-gí words for modern physics — and add them to our shared open glossary.</p>
+          <span class="tag-pill">community</span>
+        </div>
+      </div>
+      <div class="row-card reveal">
+        <div class="when">90 min</div>
+        <div>
+          <h4 class="bi-row"><span class="tg">先生工作坊</span><span class="sep">·</span><span class="en">For teachers</span></h4>
+          <p>Practical strategies and ready-made bilingual slides for bringing mother-tongue science into your own classroom.</p>
+          <span class="tag-pill">educators</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= JOIN ================= -->
+<section class="blk" id="join">
+  <div class="wrap">
+    <div class="join reveal">
+      <h2>
+        <span class="tg">做伙來</span>
+        <span class="en">Come learn with us</span>
+      </h2>
+      <p>Tell us your level and timezone and we'll point you to the right study group. It's free — the only thing we ask is that you speak up.</p>
+      <div class="cta-row">
+        <a class="btn btn-fill" href="mailto:hello@butli-taigi.org?subject=Join%20a%20study%20group&body=Hi!%20I'd%20like%20to%20join.%0A%0AMy%20level%3A%20%0AMy%20timezone%3A%20%0AWhat%20I%20want%20to%20learn%3A%20">Email to join</a>
+        <a class="btn btn-line" href="#lessons">Try a lesson first</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap foot-in">
+    <div class="foot-brand">
+      <span class="tg">物理ê台語 · 母語物理教育</span>
+      <span class="en">Physics in Taiwanese · open mother-tongue physics education</span>
+    </div>
+    <div style="text-align:right;line-height:1.9">
+      <a href="mailto:hello@butli-taigi.org">hello@butli-taigi.org</a><br>
+      Made with care for Tâi-gí speakers everywhere
+    </div>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   1) PRONUNCIATION AUDIO — WHERE TO PUT YOUR RECORDINGS
+   ---------------------------------------------------------------------
+   Every word below has a short id ('lat', 'sok-too', …). Save an audio
+   file for each id in a folder called "audio" sitting next to this HTML
+   file, and it plays automatically. Any format the browser supports is
+   fine: .m4a  .mp3  .wav  .webm  .ogg
+        taigiphysics.html
+        audio/
+          lat.webm
+          sok-too.webm
+          ...
+   If the extension differs (a phone voice memo is usually .m4a) just
+   change it in the list below.
+
+   Want to keep everything in ONE single file instead of a folder?
+   Paste a base64 data URI as the value:
+        'lat': 'data:audio/mp4;base64,AAAAHGZ0eXB...'
+
+   Set a value to '' to mark a word as "recording pending".
+   ===================================================================== */
+/* AUDIO-BLOCK-START — the Save button rewrites everything between these two markers */
+const AUDIO_BASE  = 'audio/';
+const AUDIO_FILES = {
+  'lat'        : 'lat.webm',          // 力    la̍t        force
+  'sok-too'    : 'sok-too.webm',      // 速度  sok-tōo     speed
+  'leng-liong' : 'leng-liong.webm',   // 能量  lêng-liōng  energy
+  'pho'        : 'pho.webm',          // 波    pho         wave
+  'kng'        : 'kng.webm',          // 光    kng         light
+  'tang-lat'   : 'tang-lat.webm',     // 重力  tāng-la̍t    gravity
+  'tsu-tiunn'  : 'tsu-tiunn.webm'     // 磁場  tsû-tiûnn   magnetic field
+};
+/* AUDIO-BLOCK-END */
+
+/* ---------------------------------------------------------------------
+   2) GLOSSARY — drives the hero specimen card AND the vocabulary list.
+   NOTE: Tâi-lô romanisation below is DRAFT — verify before publishing.
+   --------------------------------------------------------------------- */
+const glossary = [
+  {id:'lat',        han:'力',   lo:'la̍t',        en:'force',        note:'What makes a night-market cart speed up when you push it.'},
+  {id:'sok-too',    han:'速度', lo:'sok-tōo',     en:'speed',        note:'How far you travel in one second — and which way.'},
+  {id:'leng-liong', han:'能量', lo:'lêng-liōng',  en:'energy',       note:'The currency everything spends to make things happen.'},
+  {id:'pho',        han:'波',   lo:'pho',         en:'wave',         note:'How sound crosses a temple courtyard without anything travelling with it.'},
+  {id:'kng',        han:'光',   lo:'kng',         en:'light',        note:'A wave so fast it beats everything else in the universe.'},
+  {id:'tang-lat',   han:'重力', lo:'tāng-la̍t',    en:'gravity',      note:'Why a mango always falls down, never sideways.'},
+  {id:'tsu-tiunn',  han:'磁場', lo:'tsû-tiûnn',   en:'magnetic field', note:'The invisible pattern a magnet draws in the air around it.'}
+];
+
+/* ---------------------------------------------------------------------
+   3) LESSONS (edit / add objects to grow the library)
+   --------------------------------------------------------------------- */
+const lessons = [
+  {
+    id:'lat',
+    tag:'Mechanics · 力學', han:'力', lo:'la̍t', en:'Force',
+    intro:'A force is a push or a pull. It doesn\'t make things move on its own — it makes them change how they move: speed up, slow down, or turn.',
+    eq:'F = m · a',
+    eqNote:'Force equals mass times acceleration (Newton\'s 2nd law).',
+    everyday:'A loaded night-market cart is heavy (big m), so the same push (F) gives it only a gentle acceleration (a). Empty, the same push sends it shooting forward.',
+    draft:'Tâi-gí draft: 力 (la̍t) · 質量 (tsit-liōng, mass) · 加速度 (ka-sok-tōo, acceleration). Verify tone marks before publishing.'
+  },
+  {
+    id:'pho',
+    tag:'Waves · 波動', han:'波', lo:'pho', en:'Waves',
+    intro:'A wave carries energy from one place to another without carrying the material along. The water bobs up and down; the wave moves across.',
+    eq:'v = f · λ',
+    eqNote:'Wave speed equals frequency times wavelength.',
+    everyday:'When a temple bell rings, the bronze stays put — only the vibration travels out to your ear through the air.',
+    draft:'Tâi-gí draft: 波 (pho) · 頻率 (pîn-lu̍t, frequency) · 波長 (pho-tn̂g, wavelength). Verify before publishing.'
+  },
+  {
+    id:'tang-lat',
+    tag:'Gravity · 重力', han:'重力', lo:'tāng-la̍t', en:'Gravity',
+    intro:'Every mass pulls on every other mass. Near the Earth\'s surface this pull gives every falling object the same acceleration, whatever its weight.',
+    eq:'g ≈ 9.8 m/s²',
+    eqNote:'A falling object gains about 9.8 m/s of speed each second.',
+    everyday:'Drop a coin and a folded note at the same time (so air doesn\'t matter) and they land together — gravity doesn\'t care how heavy they are.',
+    draft:'Tâi-gí draft: 重力 (tāng-la̍t) · 自由落體 (tsū-iû lo̍h-thé, free fall). Verify before publishing.'
+  }
+];
+
+/* ---------- icons ---------- */
+const ICON = {
+  speaker:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4zm11.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM13 2.3v2.1c3.4.9 6 4 6 7.6s-2.6 6.7-6 7.6v2.1c4.6-1 8-5 8-9.7s-3.4-8.7-8-9.7z"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>',
+  clip:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 6v11.5a4.5 4.5 0 1 1-9 0V5a3 3 0 1 1 6 0v10.5a1.5 1.5 0 1 1-3 0V6H9v9.5a3 3 0 1 0 6 0V5a4.5 4.5 0 1 0-9 0v12.5a6 6 0 0 0 12 0V6h-1.5z"/></svg>'
+};
+
+/* =====================================================================
+   LANGUAGE EMPHASIS TOGGLE
+   ===================================================================== */
+function setLang(l){
+  const en = (l === 'en');
+  document.body.classList.toggle('lang-tg', !en);
+  document.body.classList.toggle('lang-en', en);
+  document.getElementById('btn-tg').classList.toggle('on', !en);
+  document.getElementById('btn-en').classList.toggle('on', en);
+  document.getElementById('btn-tg').setAttribute('aria-pressed', String(!en));
+  document.getElementById('btn-en').setAttribute('aria-pressed', String(en));
+  document.documentElement.lang = en ? 'en' : 'nan-Hant-TW';
+}
+
+/* =====================================================================
+   AUDIO ENGINE — play / slow play / record / attach
+   ===================================================================== */
+const runtimeClips = {};              // id -> {url, name}  (this visit only)
+let   currentAudio  = null;
+let   recorder      = null;
+let   recordingId   = null;
+let   recTimer      = null;
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>t.classList.remove('show'), 3600);
+}
+
+function resolveSrc(id){
+  if(runtimeClips[id]) return runtimeClips[id].url;
+  const f = AUDIO_FILES[id];
+  if(!f) return null;
+  return /^(data:|blob:|https?:|\/)/.test(f) ? f : AUDIO_BASE + f;
+}
+
+function clearPlaying(){
+  document.querySelectorAll('.say.playing').forEach(b=>b.classList.remove('playing'));
+  document.querySelectorAll('.vocab.playing').forEach(v=>v.classList.remove('playing'));
+}
+
+function stopAudio(){
+  if(currentAudio){ currentAudio.pause(); currentAudio = null; }
+  clearPlaying();
+}
+
+function noClipYet(id, btn){
+  btn.classList.add('miss');
+  setTimeout(()=>btn.classList.remove('miss'), 600);
+  const row = document.querySelector('.vocab[data-id="'+id+'"]');
+  if(row){
+    const msg = row.querySelector('.v-msg');
+    msg.textContent = 'No recording yet for "' + id + '" — tap the mic to record one, or save a file as audio/' + (AUDIO_FILES[id] || id + '.webm');
+    msg.classList.add('show');
+    setTimeout(()=>msg.classList.remove('show'), 8000);
+  }
+  toast('No recording yet for “' + id + '”. Record one with the mic, or drop a file into the audio folder.');
+}
+
+function playTerm(id, btn, rate){
+  const src = resolveSrc(id);
+  if(!src){ noClipYet(id, btn); return; }
+  stopAudio();
+  const a = new Audio(src);
+  a.playbackRate = rate || 1;
+  currentAudio = a;
+  const row = btn.closest('.vocab');
+  btn.classList.add('playing');
+  if(row) row.classList.add('playing');
+  a.addEventListener('ended', stopAudio);
+  a.addEventListener('error', ()=>{ stopAudio(); noClipYet(id, btn); });
+  a.play().catch(()=>{ stopAudio(); noClipYet(id, btn); });
+}
+
+async function toggleRecord(id, btn){
+  if(recordingId === id && recorder){ recorder.stop(); return; }
+  if(recorder){ recorder.stop(); }
+  if(!navigator.mediaDevices || !window.MediaRecorder){
+    toast('This browser can\'t record audio here. Use the clip button to attach a file instead.');
+    return;
+  }
+  let stream;
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({audio:true});
+  }catch(err){
+    toast('Microphone blocked. Allow mic access (the page must be on https:// or localhost), or attach a file with the clip button.');
+    return;
+  }
+  const mime = ['audio/webm','audio/mp4','audio/ogg'].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
+  recorder    = new MediaRecorder(stream, mime ? {mimeType:mime} : undefined);
+  recordingId = id;
+  const chunks = [];
+  const row = document.querySelector('.vocab[data-id="'+id+'"]');
+  btn.classList.add('on');
+  btn.setAttribute('aria-label','Stop recording');
+  if(row) row.classList.add('recording');
+
+  recorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
+  recorder.onstop = () => {
+    clearTimeout(recTimer);
+    stream.getTracks().forEach(t => t.stop());
+    const type = mime || 'audio/webm';
+    const ext  = type.indexOf('mp4') > -1 ? 'm4a' : type.indexOf('ogg') > -1 ? 'ogg' : 'webm';
+    const blob = new Blob(chunks, {type:type});
+    const name = id + '.' + ext;
+    runtimeClips[id] = {url:URL.createObjectURL(blob), name:name, blob:blob};
+    btn.classList.remove('on');
+    btn.setAttribute('aria-label','Record your own pronunciation');
+    if(row){
+      row.classList.remove('recording');
+      const dl = row.querySelector('.dl');
+      dl.href = runtimeClips[id].url;
+      dl.download = name;
+      dl.hidden = false;
+      const msg = row.querySelector('.v-msg');
+      msg.textContent = 'Recorded. Press play to check it, then ↓ save and drop ' + name + ' into your audio folder.';
+      msg.classList.add('show');
+    }
+    recorder = null; recordingId = null;
+    updateExportNote();
+    toast('Recorded “' + id + '”. Press ↓ save to keep it as ' + name + '.');
+  };
+  recorder.start();
+  toast('Recording “' + id + '” — click the mic again to stop (auto-stops after 12s).');
+  recTimer = setTimeout(()=>{ if(recorder) recorder.stop(); }, 12000);
+}
+
+function attachFile(id, file){
+  if(!file) return;
+  const row = document.querySelector('.vocab[data-id="'+id+'"]');
+  runtimeClips[id] = {url:URL.createObjectURL(file), name:file.name, blob:file};
+  if(row){
+    const msg = row.querySelector('.v-msg');
+    msg.textContent = 'Using “' + file.name + '” for this visit. To publish it, copy the file into your audio folder and set AUDIO_FILES[\'' + id + '\'] = \'' + file.name + '\'.';
+    msg.classList.add('show');
+  }
+  updateExportNote();
+  toast('Attached “' + file.name + '” to ' + id + '.');
+}
+
+/* =====================================================================
+   EXPORT — write your recordings permanently into the page
+   ---------------------------------------------------------------------
+   Each recording is turned into a base64 "data URI" and written into the
+   AUDIO_FILES list. That keeps the whole site — text, styles and voice —
+   inside this single HTML file, so there is no audio folder to manage
+   and nothing extra to upload.
+   ===================================================================== */
+function blobToDataURI(blob){
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload  = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+async function buildAudioBlock(){
+  const lines = [];
+  for(const g of glossary){
+    let value = AUDIO_FILES[g.id] || '';
+    if(runtimeClips[g.id] && runtimeClips[g.id].blob){
+      value = await blobToDataURI(runtimeClips[g.id].blob);
+    }
+    lines.push('  // ' + g.han + '  ' + g.lo + '  ' + g.en);
+    lines.push("  '" + g.id + "': '" + value + "',");
+  }
+  return "const AUDIO_BASE  = 'audio/';\nconst AUDIO_FILES = {\n" + lines.join('\n') + "\n};";
+}
+
+function updateExportNote(){
+  const note = document.getElementById('export-note');
+  const bE   = document.getElementById('btn-export');
+  const bC   = document.getElementById('btn-copy');
+  if(!note) return;
+  const n = Object.keys(runtimeClips).length;
+  bE.disabled = bC.disabled = (n === 0);
+  note.textContent = n === 0
+    ? 'No recordings yet in this visit — record a word above first.'
+    : n + ' of ' + glossary.length + ' words recorded in this visit. Saving now keeps these ' + n + ' and leaves the rest for another day.';
+}
+
+function saveBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+async function exportSite(){
+  const note = document.getElementById('export-note');
+  note.textContent = 'Building your file…';
+  const block = await buildAudioBlock();
+
+  let src = null;
+  try{
+    const r = await fetch(location.href, {cache:'no-store'});
+    if(r.ok) src = await r.text();
+  }catch(e){ /* opening the file straight from disk blocks this — handled below */ }
+
+  const pattern = /\/\* AUDIO-BLOCK-START[\s\S]*?AUDIO-BLOCK-END \*\//;
+  if(src && pattern.test(src)){
+    const out = src.replace(pattern, () => '/* AUDIO-BLOCK-START — the Save button rewrites everything between these two markers */\n' + block + '\n/* AUDIO-BLOCK-END */');
+    const fname = (location.pathname.split('/').pop() || 'index.html') || 'index.html';
+    saveBlob(new Blob([out], {type:'text/html'}), fname);
+    note.textContent = 'Done. Your browser has downloaded ' + fname + ' with your voice inside it. Replace your old file with this one — and re-upload it if the site is already published.';
+    toast('Downloaded ' + fname + ' with your recordings inside.');
+  }else{
+    await copyAudioCode(true);
+  }
+}
+
+async function copyAudioCode(fallback){
+  const note  = document.getElementById('export-note');
+  const block = await buildAudioBlock();
+  const lead  = fallback
+    ? 'This page is open straight from your disk, so it cannot rewrite itself. '
+    : '';
+  let copied = false;
+  try{ await navigator.clipboard.writeText(block); copied = true; }catch(e){}
+  if(copied){
+    note.textContent = lead + 'The audio code is on your clipboard. Open taigiphysics.html in a text editor and paste it over everything between AUDIO-BLOCK-START and AUDIO-BLOCK-END, then save.';
+    toast('Audio code copied — paste it between the AUDIO-BLOCK markers.');
+  }else{
+    saveBlob(new Blob([block], {type:'text/plain'}), 'my-audio-code.txt');
+    note.textContent = lead + 'Downloaded my-audio-code.txt. Open it, copy everything, and paste it over everything between AUDIO-BLOCK-START and AUDIO-BLOCK-END in taigiphysics.html.';
+    toast('Saved my-audio-code.txt.');
+  }
+}
+
+/* =====================================================================
+   RENDER: vocabulary list
+   ===================================================================== */
+(function(){
+  const vg = document.getElementById('vocab-grid');
+  glossary.forEach(g => {
+    const el = document.createElement('div');
+    el.className = 'vocab reveal';
+    el.dataset.id = g.id;
+    el.innerHTML = `
+      <button class="say" data-id="${g.id}" aria-label="Play the pronunciation of ${g.lo} (${g.en})">${ICON.speaker}</button>
+      <div class="v-main">
+        <div class="v-term">
+          <span class="tg">${g.han}</span>
+          <span class="lo">${g.lo}</span>
+          <span class="en">${g.en}</span>
+        </div>
+        <p class="v-note">${g.note}</p>
+        <div class="v-msg"></div>
+      </div>
+      <div class="v-tools">
+        <button class="mini slow" title="Play slowly">0.7×</button>
+        <button class="mini rec" title="Record your own pronunciation" aria-label="Record your own pronunciation">${ICON.mic}</button>
+        <label class="mini pick" title="Attach an audio file">${ICON.clip}<input type="file" accept="audio/*" hidden></label>
+        <a class="mini dl" title="Save this recording" hidden>↓</a>
+      </div>`;
+    vg.appendChild(el);
+
+    const sayBtn = el.querySelector('.say');
+    sayBtn.addEventListener('click', () => playTerm(g.id, sayBtn, 1));
+    el.querySelector('.slow').addEventListener('click', () => playTerm(g.id, sayBtn, 0.7));
+    const recBtn = el.querySelector('.rec');
+    recBtn.addEventListener('click', () => toggleRecord(g.id, recBtn));
+    el.querySelector('.pick input').addEventListener('change', e => attachFile(g.id, e.target.files[0]));
+  });
+})();
+
+/* =====================================================================
+   RENDER: lessons
+   ===================================================================== */
+(function(){
+  const grid = document.getElementById('lesson-grid');
+  lessons.forEach(L => {
+    const el = document.createElement('div');
+    el.className = 'lesson reveal';
+    el.innerHTML = `
+      <div class="lesson-top">
+        <div class="lesson-toggle">+</div>
+        <div class="lesson-tag">${L.tag}</div>
+        <div class="lesson-term">
+          <span class="tg">${L.han}</span>
+          <span class="lo">${L.lo}</span>
+          <span class="en">${L.en}</span>
+        </div>
+        <button class="say" data-id="${L.id}" aria-label="Play the pronunciation of ${L.lo}">${ICON.speaker}</button>
+      </div>
+      <div class="lesson-body"><div class="lesson-body-in">
+        ${L.intro}
+        <div class="eq">${L.eq}</div>
+        <div style="font-size:13px;color:#6a7d76">${L.eqNote}</div>
+        <span class="lbl">Everyday · 生活</span>${L.everyday}
+        <div class="draft">${L.draft}</div>
+      </div></div>`;
+    grid.appendChild(el);
+
+    const top    = el.querySelector('.lesson-top');
+    const sayBtn = el.querySelector('.say');
+    const toggle = () => {
+      const open = el.classList.toggle('open');
+      top.setAttribute('aria-expanded', open);
+    };
+    top.setAttribute('role','button');
+    top.setAttribute('tabindex','0');
+    top.setAttribute('aria-expanded','false');
+    top.addEventListener('click', e => { if(e.target.closest('.say')) return; toggle(); });
+    top.addEventListener('keydown', e => {
+      if(e.target.closest('.say')) return;
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+    sayBtn.addEventListener('click', e => { e.stopPropagation(); playTerm(L.id, sayBtn, 1); });
+  });
+})();
+
+/* =====================================================================
+   SPECIMEN CARD CYCLING (pauses while you hover or listen)
+   ===================================================================== */
+(function(){
+  const dots = document.getElementById('spec-dots');
+  glossary.forEach((_, i) => { const d = document.createElement('span'); if(i===0) d.className='on'; dots.appendChild(d); });
+  const $han  = document.getElementById('spec-han'),
+        $lo   = document.getElementById('spec-lo'),
+        $en   = document.getElementById('spec-en'),
+        $note = document.getElementById('spec-note'),
+        $idx  = document.getElementById('spec-idx'),
+        $say  = document.getElementById('spec-say'),
+        card  = document.getElementById('specimen');
+  let i = 0, paused = false;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function show(n){
+    [$han,$lo,$en,$note].forEach(x => x.classList.add('fade'));
+    setTimeout(() => {
+      const g = glossary[n];
+      $han.textContent = g.han; $lo.textContent = g.lo; $en.textContent = g.en; $note.textContent = g.note;
+      $say.dataset.id = g.id;
+      $say.setAttribute('aria-label', 'Play the pronunciation of ' + g.lo + ' (' + g.en + ')');
+      $idx.textContent = 'No. ' + String(n+1).padStart(2,'0') + ' / ' + String(glossary.length).padStart(2,'0');
+      [...dots.children].forEach((d,k) => d.classList.toggle('on', k===n));
+      [$han,$lo,$en,$note].forEach(x => x.classList.remove('fade'));
+    }, reduce ? 0 : 400);
+  }
+
+  card.addEventListener('mouseenter', () => paused = true);
+  card.addEventListener('mouseleave', () => paused = false);
+  card.addEventListener('focusin',   () => paused = true);
+  $say.addEventListener('click', () => { paused = true; playTerm($say.dataset.id, $say, 1); });
+
+  if(!reduce){
+    setInterval(() => { if(paused) return; i = (i+1) % glossary.length; show(i); }, 3200);
+  }
+})();
+
+/* ---------- scroll reveal ---------- */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ---------- export buttons ---------- */
+document.getElementById('btn-export').addEventListener('click', exportSite);
+document.getElementById('btn-copy').addEventListener('click', () => copyAudioCode(false));
+updateExportNote();
+
+/* close mobile menu on nav click */
+document.querySelectorAll('#nav a').forEach(a => a.addEventListener('click', () => document.getElementById('nav').classList.remove('show')));
+</script>
+</body>
+</html>
